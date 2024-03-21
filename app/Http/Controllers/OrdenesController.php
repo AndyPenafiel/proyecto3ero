@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 class OrdenesController extends Controller
 {
@@ -11,7 +12,14 @@ class OrdenesController extends Controller
      */
     public function index()
     {
-        return view('ordenes.index');
+        $jornadas=DB::select("SELECT * FROM jornadas");
+        $periodos=DB::select("SELECT * FROM aniolectivo");
+        $meses=$this->meses();
+
+        return view('ordenes.index')
+        ->with('meses', $meses)
+        ->with('jornadas', $jornadas)
+        ->with('periodos', $periodos);
     }
 
     /**
@@ -60,5 +68,25 @@ class OrdenesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function meses(){
+        return [
+            "1" => "Enero",
+            "2" => "Febrero",
+            "3" => "Marzo",
+        ];
+    }
+
+    public function generarOrdenes(Request $rq){
+        $datos=$rq->all();
+        $anl_id=$datos["anl_id"];
+        $jornada=$datos["jor_id"];
+        $mes=$datos["mes"];
+        $estudiantes=DB::select("SELECT * FROM matriculas m
+                                JOIN estudiantes e ON m.est_id=e.id
+                                WHERE m.anl_id=$anl_id and m.mat_estado=1");
+
+        dd($estudiantes);
     }
 }
