@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Models\GeneraOrdenes;
 
 class OrdenesController extends Controller
 {
@@ -75,8 +76,18 @@ class OrdenesController extends Controller
             "1" => "Enero",
             "2" => "Febrero",
             "3" => "Marzo",
+            "4" => "Abril",
+            "5" => "Mayo",
+            "6" => "Junio",
+            "7" => "Julio",
+            "8" => "Agosto",
+            "9" => "Septiembre",
+            "10" => "Octubre",
+            "11" => "Noviembre",
+            "12" => "Diciembre",
         ];
     }
+    
 
     public function generarOrdenes(Request $rq){
         $datos=$rq->all();
@@ -87,6 +98,20 @@ class OrdenesController extends Controller
                                 JOIN estudiantes e ON m.est_id=e.id
                                 WHERE m.anl_id=$anl_id and m.mat_estado=1");
 
-        dd($estudiantes);
+        foreach($estudiantes as $e)
+        {    
+            $input['mat_id']=;
+            $input['codigo']=;
+            $input['fecha_registro']=;
+            $input['valor_pagar']=;
+            $input['fecha_pago']=;
+            $input['valor_pagado']=;     
+            $input['estado']=;
+            $input['mes']=;
+            $input['responsable']=;
+            $input['secuencial']=;
+            $input['documento']=;
+        }
+
     }
 }
