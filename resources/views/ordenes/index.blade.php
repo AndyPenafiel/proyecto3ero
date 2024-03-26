@@ -10,6 +10,7 @@
         height: 30px; /* Establece la misma altura que el ancho para que sea cuadrado */
         }
     </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <div class="container">
         <h1 class="text-center">Generar Órdenes</h1>
         <form method="POST" class="form-inline" action="{{ route('generar') }}">
@@ -65,14 +66,32 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>No</th>
-                <th>ORDEN</th>
-                <th>IDENTIFICADOR</th>
+
+                <th>Secuencial</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            
+        @foreach($ordenes as $o)
+        <td>{{ $o->secuencial }}</td>
+        <td>{{ $o->fecha_registro }}</td>
+        <td class="d-flex">
+                    <a href="" class="btn btn-success me-1">
+                    <span class="material-symbols-outlined">
+                        visibility
+                    </span>
+                    </a>
+                    <a href="" class="btn btn-warning btn-sm me-1">
+                        <span class="material-symbols-outlined">edit</span>
+                    </a>
+                    <form action="" method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm-1">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </form>
+        </td>
+        @endforeach
         </tbody>
     </table>
     
