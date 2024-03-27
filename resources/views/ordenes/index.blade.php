@@ -63,36 +63,51 @@
         <br>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-
-                <th>Secuencial</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Secuencial</th>
+            <th>Fecha</th>
+            <th>Año Lectivo</th>
+            <th>Jornada</th>
+            <th>Mes</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach($ordenes as $o)
-        <td>{{ $o->secuencial }}</td>
-        <td>{{ $o->fecha_registro }}</td>
-        <td class="d-flex">
-                    <a href="" class="btn btn-success me-1">
+        <tr> <!-- Agregué la etiqueta <tr> para cada fila -->
+            <td>{{ $o->secuencial }}</td>
+            <td>{{ $o->fecha_registro }}</td>
+            <td>{{ $o->anl_descripcion }}</td>
+            <td>{{ $o->jor_descripcion }}</td>
+            <td>{{ $o->mes }}</td>
+
+
+
+            <td class="d-flex">
+
+                <a href="{{ route('mostrar', $o->secuencial) }}" class="btn btn-success me-1"> <!-- Agregué "#" en el href -->
                     <span class="material-symbols-outlined">
                         visibility
                     </span>
-                    </a>
-                    <a href="" class="btn btn-warning btn-sm me-1">
-                        <span class="material-symbols-outlined">edit</span>
-                    </a>
-                    <form action="" method="POST">
-                        <button type="submit" class="btn btn-danger btn-sm-1">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                    </form>
-        </td>
+                </a>
+
+                <a href="" class="btn btn-warning btn-sm me-1"> <!-- Agregué "#" en el href -->
+                    <span class="material-symbols-outlined">edit</span>
+                </a>
+                <form action="{{ route('ordenes.destroy', $o->secuencial) }}" method="POST" onsubmit="return confirm('¿Desea eliminar la Orden?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm-1">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </form>
+            </td>
+        </tr> <!-- Agregué la etiqueta de cierre </tr> -->
         @endforeach
-        </tbody>
-    </table>
+    </tbody>
+</table>
+
     
     @endsection
