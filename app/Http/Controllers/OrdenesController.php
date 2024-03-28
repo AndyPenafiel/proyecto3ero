@@ -22,7 +22,8 @@ class OrdenesController extends Controller
                             JOIN matriculas m ON m.id=o.mat_id
                             JOIN jornadas j ON j.id=m.jor_id
                             JOIN aniolectivo a ON a.id=m.anl_id 
-                            GROUP BY o.secuencial, o.fecha_registro,j.jor_descripcion,o.mes,a.anl_descripcion;");
+                            GROUP BY o.secuencial, o.fecha_registro,j.jor_descripcion,o.mes,a.anl_descripcion
+                            ORDER BY o.secuencial;");
         // $estudiantes =$this->generarOrdenes();
 
         foreach ($ordenes as $orden) {
@@ -131,43 +132,74 @@ class OrdenesController extends Controller
         $anl_id=$datos["anl_id"];
         $jor_id=$datos["jor_id"];
         $mes=$datos["mes"];
-        $estudiantes=DB::select("SELECT *, m.id as mat_id FROM matriculas m
-                                JOIN estudiantes e ON m.est_id=e.id
-                                JOIN jornadas j ON m.jor_id=j.id
-                                JOIN cursos c ON m.cur_id=c.id
-                                JOIN especialidades es ON m.esp_id=es.id
-                                WHERE m.anl_id=$anl_id and m.mat_estado=1 and m.jor_id=$jor_id");
-        $valor_pagar=75;
-        $nmes=$this->mesesLetras($mes);
-        $campus="G";
-        
-        $secuenciales=DB::selectone("SELECT max(secuencial) as secuencial from ordenes_generadas");
 
-        $sec=$secuenciales->secuencial+1;
-        foreach($estudiantes as $e){ 
 
-            $input['mat_id']=$e->mat_id;  //id de la matricula
-            $input['codigo']=$nmes.$campus.$e->jor_obs.$e->cur_obs.$e->esp_obs."-".$e->mat_id;  //MGM3IF-6546
-            $input['fecha_registro']=date('Y-m-d');//
-            $input['valor_pagar']=$valor_pagar;
-            $input['fecha_pago']=null;
-            $input['valor_pagado']=0;     
-            $input['estado']=0;
-            $input['mes']=$mes;
-            $input['responsable']=Auth::user()->username; // Aquí debes proporcionar el ID del usuario
-            $input['secuencial']=$sec; // Asigna un valor para el secuencial
-            $input['documento']=null; // Asigna un valor para el documento
-            GeneraOrdenes::create($input);
+        $validar=DB::select("SELECT * FROM ordenes_generadas o
+                            JOIN matriculas m ON m.id=o.mat_id
+                            WHERE m.anl_id=$anl_id
+                            AND m.jor_id=$jor_id
+                            AND o.mes=$mes ");
+
+        if(empty($validar)){
+            $estudiantes=DB::select("SELECT *, m.id as mat_id FROM matriculas m
+                                    JOIN estudiantes e ON m.est_id=e.id
+                                    JOIN jornadas j ON m.jor_id=j.id
+                                    JOIN cursos c ON m.cur_id=c.id
+                                    JOIN especialidades es ON m.esp_id=es.id
+                                    WHERE m.anl_id=$anl_id and m.mat_estado=1 and m.jor_id=$jor_id");
+            $valor_pagar=75;
+            $nmes=$this->mesesLetras($mes);
+            $campus="G";
             
-        }
-        return redirect(route('ordenes.index'));   
+            $secuenciales=DB::selectone("SELECT max(secuencial) as secuencial from ordenes_generadas");
+
+            $sec=$secuenciales->secuencial+1;
+            foreach($estudiantes as $e){ 
+
+                $input['mat_id']=$e->mat_id;  //id de la matricula
+                $input['codigo']=$nmes.$campus.$e->jor_obs.$e->cur_obs.$e->esp_obs."-".$e->mat_id;  //MGM3IF-6546
+                $input['fecha_registro']=date('Y-m-d');//
+                $input['valor_pagar']=$valor_pagar;
+                $input['fecha_pago']=null;
+                $input['valor_pagado']=0;     
+                $input['estado']=0;
+                $input['mes']=$mes;
+                $input['responsable']=Auth::user()->username; // Aquí debes proporcionar el ID del usuario
+                $input['secuencial']=$sec; // Asigna un valor para el secuencial
+                $input['documento']=null; // Asigna un valor para el documento
+                GeneraOrdenes::create($input);
+                
+            }
+            return redirect(route('ordenes.index'));
+        }else{
+            dd("YA EXISTE UNA ORDEN GENERADA CON ESTOS DATOS");
+        } 
     }
     
     public function mostrar($secuencial){
-        $estudiantes=DB::select("SELECT * from ordenes_generadas
-                                 where secuencial=$secuencial");
+        $estudiantes=DB::select("SELECT * from ordenes_generadas o 
+                                JOIN matriculas m ON m.id=o.mat_id
+                                JOIN estudiantes e ON e.id=m.est_id
+                                where secuencial=$secuencial");
         return view('ordenes.mostrar')
         ->with('estudiantes', $estudiantes);
         ; 
+    }
+
+    public function buscar(Request $rq) {
+        
+        // Realiza la consulta utilizando el valor de $dato
+        $dato=($rq->buscar);
+        $estudiantes = DB::select("SELECT * 
+                                FROM ordenes_generadas o
+                                JOIN matriculas m ON m.id = o.mat_id
+                                JOIN estudiantes e ON e.id = m.est_id
+                                WHERE UPPER(e.est_nombres) LIKE UPPER('%$dato%') OR UPPER(e.est_apellidos) LIKE UPPER('%$dato%');
+        ;
+        ");
+    
+        // Pasa los resultados de la consulta y $dato a la vista
+        return view('ordenes.buscar')
+            ->with('estudiantes', $estudiantes);
     }
 }

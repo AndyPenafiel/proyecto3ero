@@ -14,6 +14,7 @@
         </a>
     </div>
 </form>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -52,8 +53,6 @@
             <td>{{ $e->secuencial }}</td>
             <td>{{ $e->documento }}</td>
             <td class="d-flex">
-
-
                 <a href="" class="btn btn-warning btn-sm me-1"> <!-- Agregué "#" en el href -->
                     <span class="material-symbols-outlined">edit</span>
                 </a>
@@ -65,15 +64,9 @@
                     </button>
                 </form>
             </td>
-
-
-
-           
         </tr> <!-- Agregué la etiqueta de cierre </tr> -->
         @endforeach
     </tbody>
 </table>
-
-
 
 @endsection

@@ -92,10 +92,6 @@
                         visibility
                     </span>
                 </a>
-
-                <a href="" class="btn btn-warning btn-sm me-1"> <!-- Agregué "#" en el href -->
-                    <span class="material-symbols-outlined">edit</span>
-                </a>
                 <form action="{{ route('ordenes.destroy', $o->secuencial) }}" method="POST" onsubmit="return confirm('¿Desea eliminar la Orden?')">
                     @csrf
                     @method('DELETE')

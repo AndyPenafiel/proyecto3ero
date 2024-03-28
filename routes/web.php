@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::POST('/generar', [OrdenesController::class, 'generarOrdenes'])->name('generar');
     Route::get('/mostrar/{secuencial}', [OrdenesController::class, 'mostrar'])->name('mostrar');
+    Route::POST('/buscar', [OrdenesController::class, 'buscar'])->name('buscar');
 
 });
 require __DIR__.'/auth.php';
