@@ -33,15 +33,17 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('cursos', CursosController::class);
     Route::resource('users', UsersController::class);
-    Route::resource('ordenes', OrdenesController::class);
+
     
     Route::get('/exportar-cursos', [CursosController::class, 'exportarCursos'])->name('exportar.cursos');
     Route::get('/exportar-usuarios', [UsersController::class, 'exportarUsuarios'])->name('exportar.usuarios');
 
 
+    Route::resource('ordenes', OrdenesController::class);
     Route::POST('/generar', [OrdenesController::class, 'generarOrdenes'])->name('generar');
     Route::get('/mostrar/{secuencial}', [OrdenesController::class, 'mostrar'])->name('mostrar');
     Route::POST('/buscar', [OrdenesController::class, 'buscar'])->name('buscar');
+    Route::get('/exportarOrdenes/{secuencial}', [OrdenesController::class, 'exportarOrdenes'])->name('exportarOrdenes');
 
 });
 require __DIR__.'/auth.php';

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Auth; // Agregado para importar la clase Auth
 use DB;
 use App\Models\GeneraOrdenes;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdenesExport;
 
 class OrdenesController extends Controller
 {
@@ -180,26 +182,57 @@ class OrdenesController extends Controller
         $estudiantes=DB::select("SELECT * from ordenes_generadas o 
                                 JOIN matriculas m ON m.id=o.mat_id
                                 JOIN estudiantes e ON e.id=m.est_id
-                                where secuencial=$secuencial");
+                                JOIN especialidades esp ON esp.id = m.esp_id
+                                JOIN cursos cur ON cur.id = m.cur_id
+                                JOIN jornadas jor ON jor.id=m.jor_id
+                                where secuencial=$secuencial
+                                order by e.est_apellidos LIMIT 10");
         return view('ordenes.mostrar')
-        ->with('estudiantes', $estudiantes);
-        ; 
+            ->with('estudiantes', $estudiantes)
+            ->with('secuencial', $secuencial)
+            ;
     }
+    
 
     public function buscar(Request $rq) {
         
         // Realiza la consulta utilizando el valor de $dato
         $dato=($rq->buscar);
-        $estudiantes = DB::select("SELECT * 
+        $secuencial=($rq->secuencial);
+    $estudiantes = DB::select("SELECT * 
                                 FROM ordenes_generadas o
                                 JOIN matriculas m ON m.id = o.mat_id
                                 JOIN estudiantes e ON e.id = m.est_id
-                                WHERE UPPER(e.est_nombres) LIKE UPPER('%$dato%') OR UPPER(e.est_apellidos) LIKE UPPER('%$dato%');
-        ;
-        ");
+                                JOIN especialidades esp ON esp.id = m.esp_id
+                                JOIN cursos cur ON cur.id = m.cur_id
+                                JOIN jornadas jor ON jor.id=m.jor_id
+                                WHERE (UPPER(e.est_nombres) LIKE UPPER('%$dato%') OR UPPER(e.est_apellidos) LIKE UPPER('%$dato%')) AND secuencial=$secuencial
+                                order by e.est_apellidos");
     
         // Pasa los resultados de la consulta y $dato a la vista
         return view('ordenes.buscar')
-            ->with('estudiantes', $estudiantes);
+            ->with('estudiantes', $estudiantes)
+            ->with('secuencial', $secuencial)
+            ;
     }
+
+    public function exportarOrdenes($secuencial)
+{
+    // $orden = GeneraOrdenes::where('secuencial', $secuencial)->get();
+    $orden = GeneraOrdenes::select(
+        DB::raw("'NO' as NO"),
+        'ordenes_generadas.codigo', 
+        'estudiantes.est_cedula'
+    )
+    ->join('matriculas', 'matriculas.id', '=', 'ordenes_generadas.mat_id')
+    ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.est_id')
+    ->where('ordenes_generadas.secuencial', $secuencial)
+    ->get();
+
+    // dd($orden);
+
+
+    return Excel::download(new OrdenesExport($orden), 'ordenes.xlsx');
+}
+
 }
