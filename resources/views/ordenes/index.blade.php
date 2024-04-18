@@ -16,12 +16,8 @@
         <form method="POST" class="form-inline" action="{{ route('generar') }}">
             @csrf
             <div class="form-group mr-2">
-                <!-- <label for="opcion" class="mr-2">Opción:</label> -->
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    -->
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbssp;&nbsp;&nbsp;&nbsp;    -->
-                <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
-                <label for="tipo" class="mr-2">Tipo:</label>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label for="tipo" class="mr-2">Año Lectivo:</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <label for="mes" class="mr-2">Mes:</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -85,24 +81,20 @@
             
             
             <td class="d-flex">
-                
-                <a href="{{ route('mostrar', $o->secuencial) }}" class="btn btn-warning me-1"> <!-- Agregué "#" en el href -->
-                <span class="material-symbols-outlined">
-                    visibility
-                </span>
-            </a>
-                <form action="{{ route('ordenes.destroy', $o->secuencial) }}" method="POST" onsubmit="return confirm('¿Desea eliminar la Orden?')">
+                <a href="{{ route('mostrar', $o->secuencial) }}" class="btn btn-warning me-1 btn-sm d-flex align-items-center justify-content-center">
+                    <span class="material-symbols-outlined me-1">visibility</span>Ver
+                </a>
+                <form action="{{ route('ordenes.destroy', $o->secuencial) }}" method="POST" onsubmit="return confirm('¿Desea eliminar la Orden?')" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm-1">
-                        <span class="material-symbols-outlined">delete</span>
+                    <button type="submit" class="btn btn-danger me-1 btn-sm d-flex align-items-center justify-content-center">
+                        <span class="material-symbols-outlined me-1">delete</span>Eliminar
                     </button>
-                    <a href="{{ route('exportarOrdenes',$o->secuencial) }}" class="btn btn-success btn-sm mb-1">
-                    <span class="material-symbols-outlined">
-                    system_update_alt
-                    </span>
-                    </a>    
                 </form>
+                <a href="{{ route('exportarOrdenes',$o->secuencial) }}" class="btn btn-success me-1 btn-sm d-flex align-items-center justify-content-center">
+                    <span class="material-symbols-outlined me-1">file_download</span>XLS
+                </a>
+
             </td>
         </tr> <!-- Agregué la etiqueta de cierre </tr> -->
         @endforeach

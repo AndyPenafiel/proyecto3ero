@@ -3,12 +3,10 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Support\Collection;
 
 class OrdenesExport implements FromCollection
 {
-    use Exportable;
-
     protected $datos;
 
     public function __construct($datos)
@@ -18,6 +16,22 @@ class OrdenesExport implements FromCollection
 
     public function collection()
     {
-        return collect([$this->datos]);
+        $data = [];
+
+        foreach ($this->datos as $key => $d) {
+            $data[] = [
+                '#' => 'CO',
+                'Cedula del Estudiante' => $d->est_cedula,
+                'USD' => 'USD', // Valor fijo 'USD'
+                'Valor a Pagar' => $d->valor_pagar,
+                'REC' => 'REC', // Valor fijo 'REC'
+                'Codigo' => $d->codigo,
+                'N' => 'N', // Valor fijo 'N'
+                'Secuencial' => $d->secuencial,
+            ];
+        }
+
+        return new Collection($data);
     }
 }
+

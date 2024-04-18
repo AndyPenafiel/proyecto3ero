@@ -65,14 +65,14 @@ $contador = 1;
             <td class="d-flex">
 
 
-                <a href="" class="btn btn-warning btn-sm me-1"> <!-- Agregué "#" en el href -->
-                    <span class="material-symbols-outlined">edit</span>
+                <a href="" class="btn btn-warning me-1 btn-sm d-flex align-items-center justify-content-center"> <!-- Agregué "#" en el href -->
+                    <span class="material-symbols-outlined">edit</span>Editar
                 </a>
                 <form action="" method="POST" onsubmit="return confirm('¿Desea eliminar la Orden?')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm-1">
-                        <span class="material-symbols-outlined">delete</span>
+                    <button type="submit" class="btn btn-danger me-1 btn-sm d-flex align-items-center justify-content-center">
+                        <span class="material-symbols-outlined">delete</span>Eliminar
                     </button>
                 </form>
             </td>

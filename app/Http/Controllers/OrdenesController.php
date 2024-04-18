@@ -8,6 +8,7 @@ use DB;
 use App\Models\GeneraOrdenes;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdenesExport;
+use Illuminate\Support\Facades\View;
 
 class OrdenesController extends Controller
 {
@@ -218,21 +219,13 @@ class OrdenesController extends Controller
 
     public function exportarOrdenes($secuencial)
 {
-    // $orden = GeneraOrdenes::where('secuencial', $secuencial)->get();
-    $orden = GeneraOrdenes::select(
-        DB::raw("'NO' as NO"),
-        'ordenes_generadas.codigo', 
-        'estudiantes.est_cedula'
-    )
-    ->join('matriculas', 'matriculas.id', '=', 'ordenes_generadas.mat_id')
-    ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.est_id')
-    ->where('ordenes_generadas.secuencial', $secuencial)
-    ->get();
+    $datos = DB::select("SELECT * FROM ordenes_generadas o
+                        JOIN matriculas m ON m.id = o.mat_id
+                        JOIN estudiantes e ON e.id = m.est_id
+                        WHERE secuencial = $secuencial
+                        ORDER BY e.est_apellidos");
 
-    // dd($orden);
-
-
-    return Excel::download(new OrdenesExport($orden), 'ordenes.xlsx');
+    return Excel::download(new OrdenesExport($datos), 'orden_' . $secuencial . '.xlsx');
 }
-
+    
 }
