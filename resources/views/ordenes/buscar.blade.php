@@ -5,7 +5,7 @@ $contador = 1;
 
 @section('content')
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<form method="POST" class="d-flex" role="search" action="{{ route('buscar')}}">
+<form method="POST" class="d-flex" role="search" action="{{ route('buscar_ordenes')}}">
     @csrf
     <div class="d-flex"> <!-- Agregado div para flexibilidad -->
         <input class="form-control me-2 col-12" type="search" placeholder="Buscar" aria-label="Search" name="buscar">

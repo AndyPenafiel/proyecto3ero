@@ -2,9 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CursosController;
-use App\Http\Controllers\UsersController;
 use App\Http\Controllers\OrdenesController;
+use App\Http\Controllers\UsuariosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,20 +29,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    Route::resource('cursos', CursosController::class);
-    Route::resource('users', UsersController::class);
-
-    
-    Route::get('/exportar-cursos', [CursosController::class, 'exportarCursos'])->name('exportar.cursos');
-    Route::get('/exportar-usuarios', [UsersController::class, 'exportarUsuarios'])->name('exportar.usuarios');
-
-
     Route::resource('ordenes', OrdenesController::class);
     Route::POST('/generar', [OrdenesController::class, 'generarOrdenes'])->name('generar');
     Route::get('/mostrar/{secuencial}', [OrdenesController::class, 'mostrar'])->name('mostrar');
-    Route::POST('/buscar', [OrdenesController::class, 'buscar'])->name('buscar');
+    Route::POST('/buscar_ordenes', [OrdenesController::class, 'buscar'])->name('buscar_ordenes');
     Route::get('/exportarOrdenes/{secuencial}', [OrdenesController::class, 'exportarOrdenes'])->name('exportarOrdenes');
+
+    Route::resource('usuarios', UsuariosController::class);
+    Route::POST('/buscar_usuarios', [UsuariosController::class, 'buscar'])->name('buscar_usuarios');
 
 });
 require __DIR__.'/auth.php';
