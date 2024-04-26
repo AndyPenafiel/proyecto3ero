@@ -14,7 +14,7 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        $usuarios=DB::select("SELECT * FROM users");
+        $usuarios=DB::select("SELECT * FROM users"); 
 
         return view('usuarios.index')
         ->with('usuarios', $usuarios); 
@@ -89,5 +89,5 @@ class UsuariosController extends Controller
         ->with('usuario',$usuario)
         ;
     }
-    
+
 }

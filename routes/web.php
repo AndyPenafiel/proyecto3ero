@@ -37,6 +37,5 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('usuarios', UsuariosController::class);
     Route::POST('/buscar_usuarios', [UsuariosController::class, 'buscar'])->name('buscar_usuarios');
-
 });
 require __DIR__.'/auth.php';

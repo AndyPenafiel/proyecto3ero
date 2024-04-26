@@ -27,12 +27,6 @@
     </div>
     <br>
     <div class="form-group">
-        <label for="username">Rol:</label>
-        <select id="roles" name="roles" class="form-control">Sin rol
-        </select>
-    </div>
-    <br>
-    <div class="form-group">
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Ingrese su contraseña">
     </div>
